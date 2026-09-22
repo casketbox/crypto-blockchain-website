@@ -25,24 +25,35 @@ Node.js 20 以上が必要です。ビルド成果物 `app/dist/` は完全な�
 
 サーバーサイドの実行環境は不要です。いずれも無料枠で運用できます。
 
-| ホスティング | 手順 |
+### GitHub Pages（設定済み）
+
+`main` ブランチへの push で `.github/workflows/pages.yml` が動き、自動で公開されます。
+リポジトリの Settings → Pages で **Source** を *GitHub Actions* にしておいてください
+（ワークフロー側でも自動有効化を試みます）。
+
+- 公開URL: `https://<owner>.github.io/crypto-blockchain-website/`
+- Actions タブの *Deploy to GitHub Pages* から手動実行も可能です
+
+プロジェクトサイトはサブディレクトリ配信になりますが、ベースパスはワークフローが
+`actions/configure-pages` の出力から自動で決めるため、設定は不要です。
+
+### そのほか
+
+| ホスティング | 設定 |
 |---|---|
-| Cloudflare Pages | ビルドコマンド `npm run build`、出力ディレクトリ `dist`、ルートディレクトリ `app` |
+| Cloudflare Pages | ルートディレクトリ `app` / ビルドコマンド `npm run build` / 出力ディレクトリ `dist` |
 | Netlify | 同上 |
 | Vercel | 同上 |
-| GitHub Pages | `BASE_PATH=/<リポジトリ名>/ npm run build` でビルドし、`app/dist/` を公開 |
 
-GitHub Pages のプロジェクトサイトのようにサブディレクトリ配信になる場合のみ、
-環境変数 `BASE_PATH` を指定してください。画像・CSS・JS の参照パスがまとめて書き換わります。
-独自ドメインやユーザーサイト（`<username>.github.io`）ではそのままで構いません。
+これらはドメイン直下配信なので、`BASE_PATH` の指定は不要です。
+手元でサブディレクトリ配信を再現したい場合のみ `BASE_PATH=/<パス>/ npm run build` を使います。
 
 ## 画像アセットについて
 
-生成画像（ヒーロー画像・図版・OG画像・アプリアイコン）はリポジトリに含めていません。
-代わりに、サイトの配色に合わせた**プレースホルダ画像**を同梱しているため、
-クローン直後でもビルドが通り、レイアウトを確認できます。
+生成画像（ヒーロー画像・図版・OG画像・アプリアイコン）はリポジトリに同梱済みです。
+クローンすればそのままビルド・公開できます。
 
-本物の画像に差し替えるには、ネットワークから取得できる環境で次を実行します。
+配信元から取り直したい場合は次を実行します。
 
 ```bash
 cd app
@@ -51,12 +62,12 @@ npm run fetch-assets
 ASSET_BASE_URL=https://example.com npm run fetch-assets
 ```
 
-取得対象は `app/scripts/fetch-assets.mjs` に一覧があります。
-手動で差し替える場合は、同じパスに同じファイル名で置いてください。
+取得対象の一覧は `app/scripts/fetch-assets.mjs` にあります。
 
 ## リポジトリ構成
 
 ```
+.github/workflows/pages.yml    GitHub Pages への自動デプロイ
 app/
 ├── index.html                 ページの <head>（title / OGP / favicon / manifest）
 ├── vite.config.ts             ビルド設定（BASE_PATH でベースパス切り替え）
