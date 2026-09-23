@@ -25,17 +25,28 @@ Node.js 20 以上が必要です。ビルド成果物 `app/dist/` は完全な�
 
 サーバーサイドの実行環境は不要です。いずれも無料枠で運用できます。
 
-### GitHub Pages（設定済み）
+### GitHub Pages（公開中）
+
+公開URL: https://casketbox.github.io/crypto-blockchain-website/
 
 `main` ブランチへの push で `.github/workflows/pages.yml` が動き、自動で公開されます。
-リポジトリの Settings → Pages で **Source** を *GitHub Actions* にしておいてください
-（ワークフロー側でも自動有効化を試みます）。
-
-- 公開URL: `https://<owner>.github.io/crypto-blockchain-website/`
-- Actions タブの *Deploy to GitHub Pages* から手動実行も可能です
+Actions タブの *Deploy to GitHub Pages* から手動実行もできます。
 
 プロジェクトサイトはサブディレクトリ配信になりますが、ベースパスはワークフローが
-`actions/configure-pages` の出力から自動で決めるため、設定は不要です。
+`actions/configure-pages` の出力から決めるため、リポジトリ名を書く必要はありません。
+
+> **リポジトリを作り直した場合・フォークした場合は、最初に一度だけ手動設定が必要です。**
+> Settings → Pages → **Build and deployment** → **Source** を *GitHub Actions* に変更してください。
+> これを行わないと、初回のワークフローが `Configure Pages` ステップで次のように失敗します。
+>
+> ```
+> Get Pages site failed.    Error: Not Found
+> Create Pages site failed. Error: Resource not accessible by integration
+> ```
+>
+> ワークフローには `enablement: true` を指定してありますが、Actions の `GITHUB_TOKEN` には
+> Pages サイトを新規作成する権限がないため、自動での有効化はできません。
+> 有効化さえ済んでいれば、以降このステップは既存サイトを検出して通ります。
 
 ### そのほか
 

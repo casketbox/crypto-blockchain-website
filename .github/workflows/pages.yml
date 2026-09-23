@@ -31,8 +31,11 @@ jobs:
           cache: npm
           cache-dependency-path: app/package-lock.json
 
-      # enablement turns Pages on for the repository if it is not already
-      # configured, so the first run needs no manual settings change.
+      # enablement only works where the token may create a Pages site, which
+      # GITHUB_TOKEN may not: on a repository that has never had Pages turned
+      # on, this step fails with "Resource not accessible by integration" and
+      # Settings > Pages > Source must be set to GitHub Actions by hand once.
+      # Once a site exists, this step finds it and the setting is a no-op.
       - name: Configure Pages
         id: pages
         uses: actions/configure-pages@v5
