@@ -1,9 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, type ReactNode, type SVGProps } from "react";
 
-export const Route = createFileRoute("/")({
-  component: Index,
-});
+// Images live in public/ and are referenced by absolute path. Prefixing with
+// Vite's BASE_URL keeps them resolvable when the site is served from a
+// subdirectory (e.g. a GitHub Pages project site) rather than a domain root.
+const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
 type IconProps = SVGProps<SVGSVGElement>;
 
@@ -202,7 +202,7 @@ function Nav() {
   return (
     <header className="site-nav">
       <a className="site-nav-brand" href="#top">
-        <img className="site-nav-mark" src="/assets/brand/monogram-96.png" alt="" />
+        <img className="site-nav-mark" src={asset("assets/brand/monogram-96.png")} alt="" />
         暗号通貨とブロックチェーン
       </a>
       <nav className="site-nav-links" aria-label="セクション">
@@ -222,14 +222,14 @@ function Hero() {
   return (
     <section id="top" className="site-hero" ref={heroRef}>
       <div className="site-hero-layer site-hero-layer--back" ref={backRef}>
-        <img src="/assets/hero/plate-back.jpg" alt="" />
+        <img src={asset("assets/hero/plate-back.jpg")} alt="" />
       </div>
       <div className="site-hero-layer site-hero-layer--mid" ref={midRef}>
-        <img src="/assets/hero/plate-mid.jpg" alt="" />
+        <img src={asset("assets/hero/plate-mid.jpg")} alt="" />
       </div>
       <div className="site-hero-scrim" />
       <div className="site-hero-layer site-hero-layer--front" ref={frontRef}>
-        <img src="/assets/hero/hero-subject.png" alt="" />
+        <img src={asset("assets/hero/hero-subject.png")} alt="" />
       </div>
       <div className="site-hero-content">
         <p className="site-kicker site-reveal">信頼は、分散する。</p>
@@ -277,7 +277,7 @@ function BlockchainSection() {
           </p>
         </div>
         <div className="site-split-figure">
-          <img src="/assets/sections/diagram.jpg" alt="ブロックが鎖状につながるしくみを表した図" />
+          <img src={asset("assets/sections/diagram.jpg")} alt="ブロックが鎖状につながるしくみを表した図" />
         </div>
       </div>
     </section>
@@ -312,7 +312,7 @@ function CryptoSection() {
             直接その価値をやり取りできる点が、これまでのお金の仕組みと大きく異なります。
           </p>
           <div className="site-split-figure" style={{ marginTop: "1.75rem" }}>
-            <img src="/assets/sections/crypto.jpg" alt="鎖状に連なる発光するブロックのイメージ" />
+            <img src={asset("assets/sections/crypto.jpg")} alt="鎖状に連なる発光するブロックのイメージ" />
           </div>
         </div>
       </div>
@@ -519,3 +519,5 @@ function Index() {
     </main>
   );
 }
+
+export default Index;
