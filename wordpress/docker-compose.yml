@@ -1,0 +1,51 @@
+# ローカル確認用の WordPress 環境（さくらのレンタルサーバと同じ PHP 8.3 / MySQL 互換）。
+#   docker compose up -d && ./bin/local-setup.sh
+#   → http://localhost:8080 （管理画面: /wp-admin  admin / admin）
+services:
+  db:
+    image: mariadb:10.11
+    environment:
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: wordpress
+      MARIADB_ROOT_PASSWORD: root
+    volumes:
+      - db:/var/lib/mysql
+
+  wordpress:
+    image: wordpress:php8.3-apache
+    depends_on:
+      - db
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DEBUG: 1
+    volumes:
+      - wp:/var/www/html
+      - ./themes/tovus:/var/www/html/wp-content/themes/tovus
+      - ./plugins/tovus-core:/var/www/html/wp-content/plugins/tovus-core
+
+  cli:
+    image: wordpress:cli-php8.3
+    profiles: ["cli"]
+    user: "33:33"
+    depends_on:
+      - db
+      - wordpress
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wp:/var/www/html
+      - ./themes/tovus:/var/www/html/wp-content/themes/tovus
+      - ./plugins/tovus-core:/var/www/html/wp-content/plugins/tovus-core
+
+volumes:
+  db:
+  wp:

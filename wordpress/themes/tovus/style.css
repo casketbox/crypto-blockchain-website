@@ -1,0 +1,14 @@
+/*
+Theme Name: tovus
+Theme URI: https://tovus.jp/
+Description: tovus.jp のためのブロックテーマ。ネイビー × アンティークゴールドの配色で、暗号通貨とブロックチェーンをやさしく解説するサイト向けに作られています。サイトエディター（外観 → エディター）ですべて編集できます。
+Version: 1.0.0
+Requires at least: 6.5
+Tested up to: 6.8
+Requires PHP: 8.0
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: tovus
+*/
+
+/* 実際のスタイルは theme.json と assets/css/theme.css にあります。 */

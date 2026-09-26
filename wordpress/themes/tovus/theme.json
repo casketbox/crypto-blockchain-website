@@ -1,0 +1,167 @@
+{
+	"$schema": "https://schemas.wp.org/wp/6.8/theme.json",
+	"version": 3,
+	"settings": {
+		"appearanceTools": true,
+		"useRootPaddingAwareAlignments": true,
+		"layout": {
+			"contentSize": "46rem",
+			"wideSize": "74rem"
+		},
+		"color": {
+			"defaultPalette": false,
+			"defaultGradients": false,
+			"palette": [
+				{ "slug": "base", "name": "ネイビー（背景）", "color": "#10142b" },
+				{ "slug": "panel", "name": "ディープネイビー", "color": "#171c3a" },
+				{ "slug": "panel-soft", "name": "パネル", "color": "#1c2247" },
+				{ "slug": "contrast", "name": "オフホワイト（文字）", "color": "#f3efe4" },
+				{ "slug": "muted", "name": "グレー（補足文字）", "color": "#a8acc6" },
+				{ "slug": "accent", "name": "アンティークゴールド", "color": "#d9b76b" }
+			]
+		},
+		"spacing": {
+			"units": [ "px", "rem", "em", "%", "vw", "vh" ],
+			"spacingSizes": [
+				{ "slug": "20", "name": "XS", "size": "0.5rem" },
+				{ "slug": "30", "name": "S", "size": "1rem" },
+				{ "slug": "40", "name": "M", "size": "1.5rem" },
+				{ "slug": "50", "name": "L", "size": "clamp(2rem, 4vw, 2.5rem)" },
+				{ "slug": "60", "name": "XL", "size": "clamp(2.5rem, 6vw, 4rem)" },
+				{ "slug": "70", "name": "XXL", "size": "clamp(4rem, 9vw, 7rem)" }
+			]
+		},
+		"typography": {
+			"defaultFontSizes": false,
+			"fluid": true,
+			"fontFamilies": [
+				{
+					"slug": "display",
+					"name": "Noto Sans JP",
+					"fontFamily": "\"Noto Sans JP\", \"Hiragino Sans\", \"Hiragino Kaku Gothic ProN\", Meiryo, sans-serif"
+				},
+				{
+					"slug": "mono",
+					"name": "IBM Plex Mono",
+					"fontFamily": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace"
+				}
+			],
+			"fontSizes": [
+				{ "slug": "x-small", "name": "XS", "size": "0.75rem", "fluid": false },
+				{ "slug": "small", "name": "S", "size": "0.9rem", "fluid": false },
+				{ "slug": "medium", "name": "M", "size": "1rem", "fluid": false },
+				{ "slug": "large", "name": "L", "size": "1.25rem", "fluid": { "min": "1.1rem", "max": "1.25rem" } },
+				{ "slug": "x-large", "name": "XL", "size": "2.6rem", "fluid": { "min": "1.75rem", "max": "2.6rem" } },
+				{ "slug": "xx-large", "name": "XXL", "size": "4rem", "fluid": { "min": "2.25rem", "max": "4rem" } }
+			]
+		}
+	},
+	"styles": {
+		"color": {
+			"background": "var(--wp--preset--color--base)",
+			"text": "var(--wp--preset--color--contrast)"
+		},
+		"typography": {
+			"fontFamily": "var(--wp--preset--font-family--display)",
+			"fontSize": "var(--wp--preset--font-size--medium)",
+			"lineHeight": "1.8"
+		},
+		"spacing": {
+			"blockGap": "1.25rem",
+			"padding": {
+				"left": "clamp(1.25rem, 5vw, 4rem)",
+				"right": "clamp(1.25rem, 5vw, 4rem)"
+			}
+		},
+		"elements": {
+			"link": {
+				"color": { "text": "var(--wp--preset--color--accent)" },
+				":hover": { "color": { "text": "var(--wp--preset--color--contrast)" } }
+			},
+			"heading": {
+				"color": { "text": "var(--wp--preset--color--contrast)" },
+				"typography": { "fontWeight": "800", "lineHeight": "1.25", "letterSpacing": "-0.01em" }
+			},
+			"h1": { "typography": { "fontSize": "var(--wp--preset--font-size--xx-large)", "fontWeight": "900", "lineHeight": "1.15" } },
+			"h2": { "typography": { "fontSize": "var(--wp--preset--font-size--x-large)" } },
+			"h3": { "typography": { "fontSize": "var(--wp--preset--font-size--large)", "fontWeight": "700" } },
+			"button": {
+				"color": {
+					"background": "var(--wp--preset--color--accent)",
+					"text": "var(--wp--preset--color--base)"
+				},
+				"border": { "radius": "4px" },
+				"typography": { "fontWeight": "700", "fontSize": "var(--wp--preset--font-size--small)" },
+				":hover": {
+					"color": {
+						"background": "var(--wp--preset--color--contrast)",
+						"text": "var(--wp--preset--color--base)"
+					}
+				}
+			},
+			"caption": {
+				"color": { "text": "var(--wp--preset--color--muted)" },
+				"typography": { "fontSize": "var(--wp--preset--font-size--x-small)" }
+			}
+		},
+		"blocks": {
+			"core/paragraph": {
+				"color": { "text": "var(--wp--preset--color--muted)" }
+			},
+			"core/post-content": {
+				"elements": {
+					"link": { "typography": { "textDecoration": "underline" } }
+				}
+			},
+			"core/post-title": {
+				"color": { "text": "var(--wp--preset--color--contrast)" }
+			},
+			"core/post-date": {
+				"color": { "text": "var(--wp--preset--color--muted)" },
+				"typography": { "fontFamily": "var(--wp--preset--font-family--mono)", "fontSize": "var(--wp--preset--font-size--x-small)" }
+			},
+			"core/post-terms": {
+				"typography": { "fontFamily": "var(--wp--preset--font-family--mono)", "fontSize": "var(--wp--preset--font-size--x-small)" }
+			},
+			"core/navigation": {
+				"color": { "text": "var(--wp--preset--color--muted)" },
+				"typography": { "fontSize": "var(--wp--preset--font-size--small)" },
+				"elements": {
+					"link": {
+						"color": { "text": "var(--wp--preset--color--muted)" },
+						":hover": { "color": { "text": "var(--wp--preset--color--contrast)" } }
+					}
+				}
+			},
+			"core/site-title": {
+				"color": { "text": "var(--wp--preset--color--contrast)" },
+				"typography": { "fontWeight": "700", "fontSize": "var(--wp--preset--font-size--medium)" },
+				"elements": {
+					"link": {
+						"typography": { "textDecoration": "none" },
+						"color": { "text": "var(--wp--preset--color--contrast)" }
+					}
+				}
+			},
+			"core/separator": {
+				"color": { "text": "rgba(168, 172, 198, 0.18)" }
+			},
+			"core/quote": {
+				"border": { "left": { "color": "var(--wp--preset--color--accent)", "width": "2px", "style": "solid" } },
+				"spacing": { "padding": { "left": "1.25rem" } }
+			},
+			"core/code": {
+				"color": { "background": "var(--wp--preset--color--panel)" },
+				"typography": { "fontFamily": "var(--wp--preset--font-family--mono)" },
+				"border": { "radius": "8px" }
+			}
+		}
+	},
+	"templateParts": [
+		{ "name": "header", "title": "ヘッダー", "area": "header" },
+		{ "name": "footer", "title": "フッター", "area": "footer" }
+	],
+	"customTemplates": [
+		{ "name": "page-landing", "title": "ランディング（タイトルなし・全幅）", "postTypes": [ "page" ] }
+	]
+}

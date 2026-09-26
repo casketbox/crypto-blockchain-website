@@ -1,0 +1,98 @@
+name: Deploy WordPress to Sakura
+
+# wordpress/ 以下（テーマとプラグイン）を、さくらのレンタルサーバへ rsync で反映します。
+# 必要な設定（Settings → Secrets and variables → Actions）:
+#   Secrets   SAKURA_SSH_KEY   … サーバーに登録した公開鍵に対応する秘密鍵
+#             SAKURA_USER      … さくらのアカウント名（初期ドメイン <アカウント名>.sakura.ne.jp の部分）
+#   Variables SAKURA_WP_PATH   … WordPress を置いたフォルダ（例: /home/<アカウント名>/www/tovus）
+# Secrets が未設定のあいだは、構文チェックだけを行いデプロイはスキップします。
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "wordpress/**"
+      - ".github/workflows/deploy-sakura.yml"
+  pull_request:
+    paths:
+      - "wordpress/**"
+      - ".github/workflows/deploy-sakura.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-sakura
+  cancel-in-progress: false
+
+env:
+  SAKURA_HOST: www2799.sakura.ne.jp
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          tools: none
+
+      - name: PHP syntax check
+        run: |
+          find wordpress -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: theme.json is valid JSON
+        run: python3 -c "import json; json.load(open('wordpress/themes/tovus/theme.json'))"
+
+  deploy:
+    needs: check
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    env:
+      SAKURA_SSH_KEY: ${{ secrets.SAKURA_SSH_KEY }}
+      SAKURA_USER: ${{ secrets.SAKURA_USER }}
+      SAKURA_WP_PATH: ${{ vars.SAKURA_WP_PATH }}
+    steps:
+      - name: Check deploy settings
+        id: settings
+        run: |
+          if [ -z "$SAKURA_SSH_KEY" ] || [ -z "$SAKURA_USER" ] || [ -z "$SAKURA_WP_PATH" ]; then
+            echo "::notice::SAKURA_SSH_KEY / SAKURA_USER / SAKURA_WP_PATH が未設定のため、デプロイをスキップしました。"
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.settings.outputs.ready == 'true'
+
+      - name: Set up SSH
+        if: steps.settings.outputs.ready == 'true'
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SAKURA_SSH_KEY" > ~/.ssh/id_sakura
+          chmod 600 ~/.ssh/id_sakura
+          ssh-keyscan -H "$SAKURA_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          cat >> ~/.ssh/config <<EOF
+          Host sakura
+            HostName $SAKURA_HOST
+            User $SAKURA_USER
+            IdentityFile ~/.ssh/id_sakura
+            IdentitiesOnly yes
+          EOF
+
+      - name: Verify WordPress directory
+        if: steps.settings.outputs.ready == 'true'
+        run: |
+          ssh sakura "test -f '$SAKURA_WP_PATH/wp-config.php'" || {
+            echo "::error::$SAKURA_WP_PATH に wp-config.php が見つかりません。先にさくらのコントロールパネルで WordPress をインストールしてください。"
+            exit 1
+          }
+
+      - name: Upload theme and plugin
+        if: steps.settings.outputs.ready == 'true'
+        run: |
+          rsync -rlvz --delete --chmod=D755,F644 \
+            wordpress/themes/tovus/ "sakura:$SAKURA_WP_PATH/wp-content/themes/tovus/"
+          rsync -rlvz --delete --chmod=D755,F644 \
+            wordpress/plugins/tovus-core/ "sakura:$SAKURA_WP_PATH/wp-content/plugins/tovus-core/"
